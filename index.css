@@ -1,0 +1,86 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.container {
+    padding: 0;
+    background: #36393F;
+    overflow: hidden;
+    font-size: 80%;
+    height: 100%;
+}
+
+.container .title {
+    background: #36393F;
+    padding: 10px;
+    font-size: 150%;
+    color: #F6F6F6;
+    border: solid 2px #27292D;
+}
+
+.container .title #channelName::before {
+    margin-right: 10px;
+    content: "#";
+    color: #72767D;
+}
+
+.container .contents {
+    padding: 10px;
+    overflow-wrap: break-word;
+    line-height: 135%;
+}
+
+.container .scroll {
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.container .left {
+    width: 100%;
+    position: relative;
+    display: block;
+    margin-bottom: 5px;
+    max-width: 80%;
+    clear: both;
+}
+
+.container .left figure {
+    width: 50px;
+    position: absolute;
+    top: 15px;
+    left: 0;
+    padding: 0;
+    margin: 0;
+
+}
+
+.container .left figure img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+.container .left .left-text {
+    margin-left: 70px;
+}
+
+.container .left .left-text .name-date {
+    font-size: 80%;
+    color: #ffffff;
+}
+
+.container .left .left-text .name-date #date {
+    font-size: 80%;
+    color: #5E6165;
+    padding-left: 10px;
+}
+
+.container .left .text {
+    margin: 0;
+    position: relative;
+    padding: 10px;
+    color: #D6D7D8;
+}

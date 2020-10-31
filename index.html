@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>StoryHistory</title>
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="title">
+                <span id="channelName">null</span>
+            </div>
+            <div class="contents scroll" id="contents">
+
+            </div>
+        </div>
+        <script>
+            if (location.search.match(/channel=(.*?)(&|$)/) == null) {
+                var span_channelName = document.getElementById("channelName");
+                span_channelName.innerText = "CHANNEL_SPECIFY_NOT_FOUND";
+
+                Message(
+                    "https://cdn.discordapp.com/embed/avatars/" + (Math.floor(Math.random() * 5)) + ".png",
+                    "unknown",
+                    "0000",
+                    "0000/00/00 00:00:00",
+                    "Please specify a channel."
+                );
+            } else {
+                var channel_id = decodeURIComponent(location.search.match(/channel=(.*?)(&|$)/)[1]);
+                var req = new XMLHttpRequest();
+                req.onreadystatechange = function () {
+                    if (req.readyState == 4 && req.status == 200) {
+                        var data = JSON.parse(req.responseText);
+                        var len = data.messages.length;
+
+                        var span_channelName = document.getElementById("channelName");
+                        span_channelName.innerText = data.name;
+
+                        const div_contents = document.getElementById("contents");
+
+                        for (let i = 0; i < len; i++) {
+                            const img = document.createElement("img");
+                            const imgurl = "usericon/" + data.messages[i].userid + "." + data.messages[i]
+                                .avatar_type
+                            Message(
+                                imgurl,
+                                data.messages[i].username,
+                                data.messages[i].discriminator,
+                                data.messages[i].date,
+                                data.messages[i].content
+                            );
+                        }
+                    } else if (req.readyState == 4 && req.status == 404) {
+                        // ERROR
+                        const span_channelName = document.getElementById("channelName");
+                        span_channelName.innerText = "CHANNEL_IS_NOT_FOUND";
+
+                        Message(
+                            "https://cdn.discordapp.com/embed/avatars/" + (Math.floor(Math.random() * 5)) +
+                            ".png",
+                            "unknown",
+                            "0000",
+                            "0000/00/00 00:00:00",
+                            "The specified channel could not be found!"
+                        );
+                    }
+                };
+                req.open("GET", "channels/" + channel_id + ".json", false);
+                req.send(null);
+            }
+
+            function Message(imgurl, username, discriminator, date, text) {
+                var div_contents = document.getElementById("contents");
+
+                var img = document.createElement("img");
+                img.src = imgurl;
+
+                var figure = document.createElement("figure");
+                figure.appendChild(img);
+
+                var span_name = document.createElement("span");
+                span_name.id = "name";
+                span_name.innerText = username + "#" + discriminator;
+
+                var span_date = document.createElement("span");
+                span_date.id = "date";
+                span_date.innerText = date;
+
+                var div_name_date = document.createElement("div");
+                div_name_date.classList.add("name-date");
+                div_name_date.appendChild(span_name);
+                div_name_date.appendChild(span_date);
+
+                var div_text = document.createElement("div");
+                div_text.classList.add("text");
+                div_text.innerHTML = text;
+
+                var div_left_text = document.createElement("div");
+                div_left_text.classList.add("left-text");
+                div_left_text.appendChild(div_name_date);
+                div_left_text.appendChild(div_text);
+
+                var div_left = document.createElement("div");
+                div_left.classList.add("left");
+                div_left.appendChild(figure);
+                div_left.appendChild(div_left_text);
+
+                div_contents.appendChild(div_left);
+            }
+        </script>
+    </body>
+</html>
